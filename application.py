@@ -50,7 +50,7 @@ myclient = pymongo.MongoClient(mongo_uri)
 
 @app.route('/', methods=['GET'])
 def hello():
-    return 'Soy Daniel Manteca Garmendia'
+    return 'Soy Daniel Manteca Garmendia encantado señorita'
 
 
 @app.route('/login', methods=['POST'])
