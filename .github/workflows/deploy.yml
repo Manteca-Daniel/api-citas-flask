@@ -37,7 +37,7 @@ jobs:
     - name: Checkout repo
       uses: actions/checkout@v3
 
-    - name: Deploy to server using SCP
+    - name: Upload files to server
       uses: appleboy/scp-action@master
       with:
         host: 103.23.61.152
@@ -47,7 +47,7 @@ jobs:
         target: "/var/www/alumnos/dmanteca/flask_app"
         overwrite: true
 
-    - name: Restart Apache via SSH
+    - name: Install dependencies on server (no venv)
       uses: appleboy/ssh-action@master
       with:
         host: 103.23.61.152
@@ -55,7 +55,24 @@ jobs:
         password: ${{ secrets.SERVER_PASS }}
         script: |
           cd /var/www/alumnos/dmanteca/flask_app
+
+          # Si existe el venv pero roto, lo borramos
+          if [ -d "venv" ]; then
+              rm -rf venv
+          fi
+
+          # Crear el venv EXACTO que Apache pide
           python3 -m venv venv
+
+          # Activarlo
           source venv/bin/activate
+
+          # Instalar dependencias DENTRO del venv
+          pip install --upgrade pip
           pip install -r requirements.txt
+
+          # Permisos para que Apache pueda usar tu venv
+          chmod -R 755 /var/www/alumnos/dmanteca/flask_app/venv
+
+          # Recargar Apache
           sudo systemctl reload apache2
