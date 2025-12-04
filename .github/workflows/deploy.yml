@@ -45,7 +45,7 @@ jobs:
         target: "/var/www/alumnos/dmanteca/flask_app"
         overwrite: true
 
-    - name: Install dependencies on server
+    - name: Install dependencies on server (no sudo)
       uses: appleboy/ssh-action@master
       with:
         host: 103.23.61.152
@@ -53,9 +53,15 @@ jobs:
         password: ${{ secrets.SERVER_PASS }}
         script: |
           cd /var/www/alumnos/dmanteca/flask_app
+
+          # recreate venv
           rm -rf venv
           python3 -m venv venv
           source venv/bin/activate
+          pip install --upgrade pip
           pip install -r requirements.txt
           chmod -R 755 venv
-          sudo systemctl restart apache2
+
+          # restart apache WITHOUT sudo
+          systemctl reload apache2 || true
+
