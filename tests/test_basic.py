@@ -2,7 +2,7 @@ from application import app
 
 
 def test_root(client):
-    response = client.get("/flask")
+    response = client.get("/")
     assert response.status_code == 200
     assert b"Hello, World!" in response.data
 
@@ -18,7 +18,7 @@ def test_register_ok(client, mock_db):
         "date": "25/12/2025"
     }
 
-    response = client.post("/flask/register", json=payload)
+    response = client.post("/register", json=payload)
     assert response.status_code == 200
     assert response.json["msg"] == "user created"
 
@@ -34,7 +34,7 @@ def test_login_ok(client, mock_db):
     import bcrypt
     bcrypt.checkpw = lambda pwd, hashed: True
 
-    response = client.post("/flask/login", json={
+    response = client.post("/login", json={
         "username": "testuser",
         "password": "1234"
     })
