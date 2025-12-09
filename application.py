@@ -52,12 +52,12 @@ mongo_uri = os.environ.get("MONGODB_URI", "mongodb://localhost:27017/")
 myclient = pymongo.MongoClient(mongo_uri)
 
 
-@app.route("/")
-def root():
+@api.route('/', methods=['GET'])
+def hello():
     return "Hello, World!"
 
 
-@app.route('/login', methods=['POST'])
+@api.route('/login', methods=['POST'])
 def login():
     """
     Iniciar sesión en la aplicación
@@ -102,7 +102,7 @@ def login():
         return jsonify({"msg": "Bad username or password"}), 401
 
 
-@app.route("/register", methods=['POST'])
+@api.route("/register", methods=['POST'])
 def register():
     """
     Registrar un nuevo usuario
@@ -175,7 +175,7 @@ def register():
     return jsonify({"msg": "user created"}), 200
 
 
-@app.route("/centers", methods=['GET'])
+@api.route("/centers", methods=['GET'])
 @jwt_required()
 def center():
     """
@@ -212,7 +212,7 @@ def center():
     return jsonify(list(centers))
 
 
-@app.route("/profile", methods=['GET'])
+@api.route("/profile", methods=['GET'])
 @jwt_required()
 def profile():
     """
@@ -257,7 +257,7 @@ def profile():
     return jsonify(user)
 
 
-@app.route("/date/create", methods=['POST'])
+@api.route("/date/create", methods=['POST'])
 @jwt_required()
 def createDate():
     
@@ -326,7 +326,7 @@ def createDate():
     return jsonify({"msg": "Date created successfully"}), 200
 
 
-@app.route("/date/getByDay", methods=['POST'])
+@api.route("/date/getByDay", methods=['POST'])
 @jwt_required()
 def getDatesByDay():
     """
@@ -372,7 +372,7 @@ def getDatesByDay():
     return jsonify(format_dates(list(dates)))
 
 
-@app.route("/date/getByUser", methods=['GET'])
+@api.route("/date/getByUser", methods=['GET'])
 @jwt_required()
 def getDateByUser():
     """
@@ -412,7 +412,7 @@ def getDateByUser():
     return jsonify(format_dates(list(dates)))
 
 
-@app.route("/date/delete", methods=['POST'])
+@api.route("/date/delete", methods=['POST'])
 @jwt_required()
 def deleteDate():
     """
@@ -495,7 +495,7 @@ def deleteDate():
     return jsonify({"msg": "Date deleted successfully"}), 200
 
 
-@app.route("/dates", methods=['GET'])
+@api.route("/dates", methods=['GET'])
 @jwt_required()
 def getDates():
     """
@@ -533,7 +533,7 @@ def getDates():
    
     return jsonify(format_dates(list(dates)))
 
-@app.route("/migracion", methods=['GET'])
+@api.route("/migracion", methods=['GET'])
 def migracion():
 
     dblist = myclient.list_database_names()
