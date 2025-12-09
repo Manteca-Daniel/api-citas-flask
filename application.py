@@ -48,7 +48,7 @@ mongo_uri = os.environ.get("MONGODB_URI", "mongodb://localhost:27017/")
 myclient = pymongo.MongoClient(mongo_uri)
 
 
-@app.route('/', methods=['GET'])
+@app.route('/flask', methods=['GET'])
 def hello():
     return 'Hello, World!'
 
