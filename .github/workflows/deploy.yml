@@ -45,7 +45,7 @@ jobs:
         target: "/var/www/alumnos/dmanteca/flask_app"
         overwrite: true
 
-    - name: Install dependencies on server (no sudo)
+    - name: Install dependencies inside EXISTING venv
       uses: appleboy/ssh-action@master
       with:
         host: 103.23.61.152
@@ -54,11 +54,12 @@ jobs:
         script: |
           cd /var/www/alumnos/dmanteca/flask_app
 
-          rm -rf venv
-          python3 -m venv venv
+          # Activamos el venv existente
           source venv/bin/activate
+
+          # Instalamos dependencias dentro del venv
           pip install --upgrade pip
           pip install -r requirements.txt
-          chmod -R 755 venv
 
+          # Recargar apache
           sudo systemctl reload apache2 || true
