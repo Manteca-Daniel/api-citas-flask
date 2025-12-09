@@ -4,7 +4,7 @@ from application import app
 def test_root(client):
     response = client.get("/flask/")
     assert response.status_code == 200
-    assert b"Hello, World!" in response.data
+    assert b"Hello, World SOY MANTECA LO HICE AL FIN YAAAAAAAAAAAAA!" in response.data
 
 
 def test_register_ok(client, mock_db):
