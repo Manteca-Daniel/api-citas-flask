@@ -48,7 +48,7 @@ swagger = Swagger(app, template={
     "security": [{"Bearer": []}]
 })
 
-mongo_uri = os.environ.get("MONGODB_URI", "mongodb://localhost:27017/")
+mongo_uri = os.environ.get("MONGODB_URI", "mongodb+srv://danielmantecadmg1_db_user:T3GUiHYhOQqd25UP@m0.n7qug1d.mongodb.net/?appName=M0")
 myclient = pymongo.MongoClient(mongo_uri)
 
 
