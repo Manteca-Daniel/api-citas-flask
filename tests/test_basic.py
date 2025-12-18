@@ -116,17 +116,18 @@ def test_get_dates_by_user(client, auth_header, mock_db):
 
 def test_get_dates_by_day(client, auth_header, mock_db):
     mock_db["citas"].find = lambda q, p: [
-        {"day": "25/12/2025", "hour": "14"}
+        {"day": 25, "hour": "14"}
     ]
 
     res = client.post(
         "/flask/date/getByDay",
         headers=auth_header,
-        json={"day": "25/12/2025"}
+        json={"day": 25}
     )
 
     assert res.status_code == 200
     assert isinstance(res.json, list)
+
 
 def test_delete_date_ok(client, auth_header, mock_db):
     mock_db["citas"].find_one = lambda q: {
