@@ -341,7 +341,8 @@ def getDatesByDay():
           in: body
           type: string
           required: true
-          description: El día para el cual se desean obtener las citas, entre 1 y 31.
+          description: Día en formato DD/MM/YYYY
+          example: "25/12/2025"
     responses:
         200:
             description: Una lista de citas para el día especificado.
@@ -350,31 +351,34 @@ def getDatesByDay():
                 items:
                     type: object
                     properties:
-                        day:
+                        username:
                             type: string
-                            description: El día de la cita.
-                        cancel:
-                            type: integer
-                            description: Estado de cancelación de la cita.
+                        date:
+                            type: string
+                            example: "25/12/2025 14:00:00"
+                        center:
+                            type: string
         400:
-            description: Solicitud incorrecta, el parámetro 'day' es requerido.
+            description: Solicitud incorrecta
     """
 
     mydb = myclient["Clinica"]
     mycol = mydb["citas"]
+
     day = request.json.get('day', None)
 
+    # Validar formato DD/MM/YYYY
     try:
-        day = int(day)
+        datetime.strptime(day, '%d/%m/%Y')
     except (TypeError, ValueError):
         return jsonify({"msg": "Bad request"}), 400
 
-    if day < 1 or day > 31:
-        return jsonify({"msg": "Bad request"}), 400
+    dates = mycol.find(
+        {"day": day, "cancel": {"$ne": 1}},
+        {"_id": 0}
+    )
 
-    dates = mycol.find({"day": day, "cancel": {"$ne": 1}}, {"_id": 0})
-    
-    return jsonify(format_dates(list(dates)))
+    return jsonify(format_dates(list(dates))), 200
 
 
 @api.route("/date/getByUser", methods=['GET'])
