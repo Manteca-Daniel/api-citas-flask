@@ -364,7 +364,12 @@ def getDatesByDay():
     mycol = mydb["citas"]
     day = request.json.get('day', None)
 
-    if not day or (day > 31 or day < 1):
+    try:
+        day = int(day)
+    except (TypeError, ValueError):
+        return jsonify({"msg": "Bad request"}), 400
+
+    if day < 1 or day > 31:
         return jsonify({"msg": "Bad request"}), 400
 
     dates = mycol.find({"day": day, "cancel": {"$ne": 1}}, {"_id": 0})
