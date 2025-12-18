@@ -11,7 +11,9 @@ def client():
 
 @pytest.fixture
 def access_token():
-    return create_access_token(identity="testuser")
+    with app.app_context():
+        return create_access_token(identity="testuser")
+
 
 
 @pytest.fixture
